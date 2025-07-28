@@ -18,7 +18,8 @@ let getComputerChoice = () => {
 
 let getHumanChoice = () => prompt('What do you want to throw?').toLowerCase();
 
-let computerScore, humanScore = 0;
+let humanScore = 0;
+let computerScore = 0;
 
 let playRound = (humanChoice, computerChoice) => {
   let result = '';
@@ -35,6 +36,7 @@ let playRound = (humanChoice, computerChoice) => {
           result = handleResult('win', humanChoice, computerChoice);
           break;
       }
+      break;
     case 'paper':
       switch (computerChoice) {
         case 'rock':
@@ -47,6 +49,7 @@ let playRound = (humanChoice, computerChoice) => {
           result = handleResult('lose', humanChoice, computerChoice);
           break;
       }
+      break;
     case 'scissors':
       switch (computerChoice) {
         case 'rock':
@@ -59,6 +62,7 @@ let playRound = (humanChoice, computerChoice) => {
           result = handleResult('tie', humanChoice, computerChoice);
           break;
       }
+      break;
   }
 
   const resultDiv = document.querySelector('.result');
@@ -78,8 +82,23 @@ let handleResult = (result, humanChoice, computerChoice) => {
   }
 }
 
+const gameEnd = (winStatus) => {
+  alert(`you ${winStatus} ${humanScore} to ${computerScore}!`);
+  humanScore = computerScore = 0;
+}
+
+const onPlayButton = (event) => {
+  const numHumanWins = document.querySelector('.scores-human .num-wins');
+  const numComputerWins = document.querySelector('.scores-computer .num-wins');
+  playRound(event.target.textContent, getComputerChoice());
+  if (humanScore == 5) gameEnd('win');
+  if (computerScore == 5) gameEnd('lose');
+  numHumanWins.innerText = humanScore;
+  numComputerWins.innerText = computerScore;
+}
+
 window.onload = () => {
   const rpsOptions = document.querySelector('.rps-options');
 
-  rpsOptions.addEventListener('click', (event) => playRound(event.target.textContent, getComputerChoice()));
+  rpsOptions.addEventListener('click', onPlayButton);
 }
